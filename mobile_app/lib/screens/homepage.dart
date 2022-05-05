@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile_app/screens/product_detail.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({
@@ -34,16 +35,28 @@ class HomePage extends StatelessWidget {
                     child: Card(
                       elevation: 7,
                       child: Row(children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          padding: EdgeInsets.all(5),
-                          height: 120,
-                          width: 120,
-                          child: Image.network(
-                            (snapshot.data as dynamic)['data'][index]
-                                ['image_url'],
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProductDetail(
+                                  product: (snapshot.data as dynamic)['data'][index],
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            padding: EdgeInsets.all(5),
+                            height: 120,
+                            width: 120,
+                            child: Image.network(
+                              (snapshot.data as dynamic)['data'][index]
+                                  ['image_url'],
+                            ),
                           ),
                         ),
                         Expanded(
@@ -55,22 +68,25 @@ class HomePage extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    (snapshot.data as dynamic)['data'][index]['name'],
+                                    (snapshot.data as dynamic)['data'][index]
+                                        ['name'],
                                     style: TextStyle(
-                                        fontSize: 20, fontWeight: FontWeight.bold),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Align(
                                   alignment: Alignment.topLeft,
-                                  child: Text((snapshot.data as dynamic)['data'][index]
-                                      ['description']),
+                                  child: Text((snapshot.data as dynamic)['data']
+                                      [index]['description']),
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Icon(Icons.edit),
-                                    Text((snapshot.data as dynamic)['data'][index]
-                                        ['price']),
+                                    Text((snapshot.data as dynamic)['data']
+                                        [index]['price']),
                                   ],
                                 ),
                               ],
