@@ -2,14 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app/screens/product_detail.dart';
+import 'package:mobile_app/screens/add_product.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({
     Key? key,
   }) : super(key: key);
 
-  final String url = 'http://127.0.0.1:8000/api/products';
-  //android emulator:http://10.0.2.2
+  //Web emulator
+  // final String url = 'http://127.0.0.1:8000/api/products';
+  
+  //Android emulator
+  final String url = 'http://10.0.2.2:8000/api/products';
 
   Future getProducts() async {
     var response = await http.get(Uri.parse(url));
@@ -20,6 +24,15 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddProduct()),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
       appBar: AppBar(
         title: Text('Jaenal Store'),
       ),
