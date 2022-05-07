@@ -4,19 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/screens/homepage.dart';
 import 'package:http/http.dart' as http;
 
-class AddProduct extends StatelessWidget {
+class EditProduct extends StatelessWidget {
+  final Map product;
+  
+  EditProduct({required this.product});
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
   TextEditingController _imageUrlController = TextEditingController();
 
-  Future saveProduct() async{
+  Future updateProduct() async{
   //Web emulator
     // http.post(Uri.parse('http://127.0.0.1:8000/api/products'));
   //Android emulator
     final response =  
-      await http.post(Uri.parse('http://10.0.2.2:8000/api/products'),body:{
+      await http.put(Uri.parse('http://10.0.2.2:8000/api/products/' + product['id'].toString()),body:{
       'name': _nameController.text,
       'description': _descriptionController.text,
       'price': _priceController.text,
@@ -31,14 +34,14 @@ class AddProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: Text('Edit Product'),
       ),
       body: Form(
         key: _formKey,
         child: Column(
           children: [
             TextFormField(
-              controller: _nameController,
+              controller: _nameController..text = product['name'],
               decoration: InputDecoration(
                 labelText: 'Name',
               ),
@@ -50,7 +53,7 @@ class AddProduct extends StatelessWidget {
               },
             ),
             TextFormField(
-              controller: _descriptionController,
+              controller: _descriptionController..text = product['description'],
               decoration: InputDecoration(
                 labelText: 'Description',
               ),
@@ -62,7 +65,7 @@ class AddProduct extends StatelessWidget {
               },
             ),
             TextFormField(
-              controller: _priceController,
+              controller: _priceController..text = product['price'],
               decoration: InputDecoration(
                 labelText: 'Price',
               ),
@@ -74,7 +77,7 @@ class AddProduct extends StatelessWidget {
               },
             ),
             TextFormField(
-              controller: _imageUrlController,
+              controller: _imageUrlController..text = product['image_url'],
               decoration: InputDecoration(
                 labelText: 'Image URL',
               ),
@@ -91,15 +94,15 @@ class AddProduct extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  saveProduct().then((value){
+                  updateProduct().then((value){
                     Navigator.push(context,
                       MaterialPageRoute(builder: (context) => HomePage()));
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar
-                    (content: Text("Product berhasil di tambah")));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar
+                    (content: Text("Product berhasil di ubah")));
                   });
                 }
               },
-              child: Text('Save'),
+              child: Text('Update'),
             ),
           ],
         ),
